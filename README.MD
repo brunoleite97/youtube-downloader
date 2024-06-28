@@ -19,16 +19,31 @@ Para a instalação crie o ambiente virtual e instale as dependencias
 
 ```
 python -m venv env
-source venv/bin/activate
+```
+```
+env\Scripts\activate
+```
+```
 pip install -r requirements.txt
 ```
+
+### Preparando o download
+
+Para o download, será necessario criar um arquivo.json, onde será informado os links dos das musicas a serem baixadas. Ele deve ter o seguinte formato:
+<details><summary>arquivo.json</summary>
+
+```
+{
+    "links": [
+        "https://www.youtube.com/watch?v=fregObNcHC8",
+        "https://www.youtube.com/watch?v=hTWKbfoikeg"
+    ]
+}
+```
+</details>
 
 ### Execução
 
 ```
 python main.py
 ```
-
-## Licença
-
-Este projeto está licenciado sob a licença MIT - consulte o arquivo [LICENSE.md](LICENSE.md) para obter detalhes.
