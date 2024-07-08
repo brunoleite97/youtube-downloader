@@ -19,7 +19,6 @@ def convert_mp4_to_mp3(input_folder, output_folder):
                 video_clip.close()
                 audio_clip.close()
 
-                # Remove o arquivo de vídeo após a conversão
                 os.remove(input_file)
                 print(f"Arquivo '{input_file}' foi removido com sucesso após a conversão.")
             except Exception as e:
