@@ -9,7 +9,6 @@ def extrair_id_video(link):
 
 def baixar_video(link):
     try:
-        # Verifica se a pasta "Videos" existe, caso contrário a cria
         if not os.path.exists("Videos"):
             os.makedirs("Videos")
 
@@ -33,7 +32,7 @@ def baixar_videos(lista_links):
 
 if __name__ == "__main__":
     lista_links = [
-        "https://www.youtube.com/watch?v=dQw4w9WgXcQ",  # Adicione os links desejados aqui
+        "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
         "https://www.youtube.com/watch?v=9bZkp7q19f0"
     ]
     baixar_videos(lista_links)
