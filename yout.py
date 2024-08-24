@@ -1,6 +1,6 @@
 import os
-from pytube import YouTube
 from urllib.parse import urlparse, parse_qs
+import yt_dlp
 
 def extrair_id_video(link):
     parsed_url = urlparse(link)
@@ -8,23 +8,32 @@ def extrair_id_video(link):
     return video_id[0] if video_id else None
 
 def baixar_video(link):
-    yt = None
     try:
-        yt = YouTube(link)
-        stream = yt.streams.filter(file_extension='mp4', progressive=True).first()
-        print(f"Baixando o vídeo '{yt.title}'...")
-        stream.download(output_path="Videos", filename_prefix="")
-        print(f"O vídeo '{yt.title}' foi baixado com sucesso.")
+        # Verifica se a pasta "Videos" existe, caso contrário a cria
+        if not os.path.exists("Videos"):
+            os.makedirs("Videos")
+
+        ydl_opts = {
+            'format': 'best',
+            'outtmpl': 'Videos/%(title)s.%(ext)s',
+        }
+
+        print(f"Baixando o vídeo de '{link}'...")
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([link])
+        print(f"Vídeo baixado com sucesso: {link}")
         return True
     except Exception as e:
         print(f"Erro ao baixar o vídeo de '{link}': {e}")
-        if yt:
-            file_path = os.path.join("Videos", f"{yt.title}.mp4")
-            if os.path.exists(file_path):
-                os.remove(file_path)
-                print(f"Arquivo '{yt.title}.mp4' excluído devido ao erro durante o download.")
         return False
 
 def baixar_videos(lista_links):
     for link in lista_links:
         baixar_video(link)
+
+if __name__ == "__main__":
+    lista_links = [
+        "https://www.youtube.com/watch?v=dQw4w9WgXcQ",  # Adicione os links desejados aqui
+        "https://www.youtube.com/watch?v=9bZkp7q19f0"
+    ]
+    baixar_videos(lista_links)
