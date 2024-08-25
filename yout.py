@@ -7,14 +7,36 @@ def extrair_id_video(link):
     video_id = parse_qs(parsed_url.query).get('v')
     return video_id[0] if video_id else None
 
+def verificar_existencia_arquivo(nome_arquivo, pasta):
+    for filename in os.listdir(pasta):
+        if filename.startswith(nome_arquivo) and filename.endswith(".mp3"):
+            return True
+    return False
+
 def baixar_video(link):
     try:
         if not os.path.exists("Videos"):
             os.makedirs("Videos")
 
+        # Extrai o título do vídeo sem baixar
+        ydl_opts_info = {
+            'skip_download': True,
+            'quiet': True,
+            'format': 'best',
+            'outtmpl': '%(title)s.%(ext)s',
+        }
+
+        with yt_dlp.YoutubeDL(ydl_opts_info) as ydl:
+            info_dict = ydl.extract_info(link, download=False)
+            video_title = info_dict.get('title', None)
+
+        if verificar_existencia_arquivo(video_title, "Musica"):
+            print(f"'{video_title}' já existe na pasta 'Musica'. Pulando o download...")
+            return False
+
         ydl_opts = {
             'format': 'best',
-            'outtmpl': 'Videos/%(title)s.%(ext)s',
+            'outtmpl': f'Videos/{video_title}.%(ext)s',
         }
 
         print(f"Baixando o vídeo de '{link}'...")
@@ -29,10 +51,3 @@ def baixar_video(link):
 def baixar_videos(lista_links):
     for link in lista_links:
         baixar_video(link)
-
-if __name__ == "__main__":
-    lista_links = [
-        "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-        "https://www.youtube.com/watch?v=9bZkp7q19f0"
-    ]
-    baixar_videos(lista_links)
